@@ -1,0 +1,1 @@
+/home/wu/downloads/src/chnoid_dev/choreonoid/build/lib/choreonoid-1.5/rtc/JojoPDservo.so

@@ -1,0 +1,2 @@
+/home/wu/src/HRP3.1x/myPDservo/CMakeFiles/JojoPDservo.dir
+/home/wu/src/HRP3.1x/myPDservo/CMakeFiles/JojoPDservoComp.dir

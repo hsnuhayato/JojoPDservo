@@ -1,0 +1,257 @@
+// -*- C++ -*-
+#include "JojoPDservo.h"
+
+//#include <rtm/CorbaNaming.h>
+//#include <hrpModel/ModelLoaderUtil.h>
+using namespace std;
+
+// Module specification
+static const char* JojoPDservo_spec[] =
+  {
+    "implementation_id", "JojoPDservo",
+    "type_name",         "JojoPDservo",
+    "description",       "Sequence InPort component",
+    "version",           "1.0",
+    "vendor",            "R. Kishibe",
+    "category",          "example",
+    "activity_type",     "SPORADIC",
+    "kind",              "SequenceInComponent",
+    "max_instance",      "1",
+    "language",          "C++",
+    "lang_type",         "compile",
+    // Configuration variables
+    ""
+  };
+
+
+
+JojoPDservo::JojoPDservo(RTC::Manager* manager)
+  : RTC::DataFlowComponentBase(manager),
+    m_qRefIn("qRefIn", m_qRef),
+    m_qCurIn("qCurIn", m_qCur),
+    m_tauRefOut("tauRefOut", m_tauRef)
+{
+
+}
+
+
+JojoPDservo::~JojoPDservo()
+{
+
+}
+
+
+RTC::ReturnCode_t JojoPDservo::onInitialize()
+{
+  //
+  // Registration: InPort/OutPort/Service
+  //
+  // Set InPort buffers
+  addInPort("qRefIn", m_qRefIn);
+  addInPort("qCurIn", m_qCurIn);
+  
+  // Set OutPort buffer
+  addOutPort("tauRefOut", m_tauRefOut);
+
+
+
+
+  //
+  // get properties
+  //
+  RTC::Properties& prop = getProperties();
+
+  
+  coil::stringTo(m_dt, prop["pdservo.dt"].c_str());
+  m_instanceName = prop["instance_name"];
+
+  std::cout << m_instanceName << ": dt = " << m_dt << std::endl;
+  
+  //m_dt=0.005;
+
+  /*
+  //
+  // get the reference of nameservice
+  //
+  RTC::Manager& rtcManager = RTC::Manager::instance();
+  std::string nameServer = rtcManager.getConfig()["corba.nameservers"];
+  int commaPos = nameServer.find(",");
+  if (commaPos > 0)
+    nameServer = nameServer.substr(0, commaPos);
+  RTC::CorbaNaming naming(rtcManager.getORB(), nameServer.c_str());
+  CosNaming::NamingContext_var m_rootNameContext = CosNaming::NamingContext::_duplicate(naming.getRootContext());
+  */
+
+  //
+  // setup robot model
+  //
+  cnoid::BodyLoader bl;
+  m_robot=bl.load( prop["model"].c_str());
+  
+  std::cout<<"dof robot "<<m_robot->numJoints()<<std::endl;
+  m_robot->rootLink()->p()<<0.0, 0.0, 0.705;
+  std::cout<<"R "<<m_robot->rootLink()->name()<<std::endl;
+  m_robot->calcForwardKinematics();
+  std::cout<<"U "<<'\n'<<m_robot->link("RLEG_JOINT5")->p()<<std::endl;
+
+  //BodyLoader bl;
+  //cnoid::Body dfs;
+  //bl=new BodyLoader();
+  //m_robot = BodyPtr(new Body());
+  //Body roro;
+  //bl.load(roro, prop["model"].c_str());
+
+  /*
+  m_robot = BodyPtr(new Body());
+  //if (!loadBodyFromModelLoader(m_robot, prop["model"].c_str(), m_rootNameContext))
+  if (bl.load(m_robot, prop["model"].c_str())
+    {
+      std::cerr << m_instanceName << " : failed to load model[" << prop["model"] << "]" << std::endl;
+    }
+  */
+
+  //
+  // set PD gain
+  //
+
+  
+  coil::stringTo(m_pGain, prop["pdservo.pgain"].c_str());
+  coil::stringTo(m_dGain, prop["pdservo.dgain"].c_str());
+  coil::stringTo(m_Limit, prop["pdservo.torqueLimit"].c_str());
+
+  int dof = m_robot->numJoints();
+  //int dof = 32;
+  m_qCur.data.length(dof);
+  m_qRef.data.length(dof);
+  m_tauRef.data.length(dof);
+  
+  if( m_pGain.size() != dof  ||  m_dGain.size() != dof ) {
+    std::cerr << m_instanceName << " : failed to load gain" << std::endl;
+  }
+  else {
+    std::cout << m_instanceName << " : p gain =";  for(int i = 0; i < m_pGain.size(); i++)  std::cout << "  " << m_pGain[i];  std::cout << std::endl;
+    std::cout << m_instanceName << " : d gain =";  for(int i = 0; i < m_dGain.size(); i++)  std::cout << "  " << m_dGain[i];  std::cout << std::endl;
+    std::cout << m_instanceName << " : d limi =";  for(int i = 0; i < m_dGain.size(); i++)  std::cout << "  " << m_Limit[i];  std::cout << std::endl;
+
+    /*
+    for(int i = 0; i < m_dGain.size(); i++) {
+      m_pGain[i]=m_pGain[i] * 0.5;
+    }
+    */
+    m_qPre.resize(dof);
+    m_refPre.resize(dof);
+
+    for(int i = 0; i < dof; i++) {
+      m_qPre[i] = 0.0;
+      m_refPre[i]=0.0;
+      //add by wu
+      m_qCur.data[i]=0.0;
+      m_qRef.data[i]=0.0;
+      m_tauRef.data[i]=0.0;
+      //cout<<m_robot->joint(i)->m()<<" ";
+    }
+    m_isFirstLoop = true;
+  }
+  //cout<<endl;  
+
+  //cout<<m_robot->mass()<<endl;
+
+  return RTC::RTC_OK;
+}
+
+
+RTC::ReturnCode_t JojoPDservo::onExecute(RTC::UniqueId ec_id)
+{
+  //
+  // set initial data
+  //
+  /*
+  if(m_isFirstLoop) {
+    std::cout << "state 1" << std::endl;
+
+    if( m_qCurIn.isNew() ) {
+      m_qCurIn.read();
+      //cout<<"cur in "<<endl;
+      //cout<<m_qCur.data[0]<<endl;
+
+
+      std::cout << "state 2" << std::endl;
+      for(int i = 0; i < m_qCur.data.length(); i++) {
+	//cout<<m_qCur.data[i]<<" ";
+	m_qPre[i]      = m_qCur.data[i];
+	m_qRef.data[i] = m_qCur.data[i];
+      }
+      //cout<<endl;
+
+      std::cout << "state 3" << std::endl;
+      m_isFirstLoop = false;
+    }
+    else {
+      std::cout << "state 4" << std::endl;
+      return RTC::RTC_OK;
+    }
+    }
+  */
+
+  
+  if( m_qCurIn.isNew() )  {
+    m_qCurIn.read();
+    
+    if( m_qRefIn.isNew() ){
+      m_qRefIn.read();
+      //cout<<"ref q new"<<endl;
+    }  
+  
+    for(int i = 0; i < m_qCur.data.length(); i++) {
+      double dq_cur = (m_qCur.data[i] - m_qPre[i] )/m_dt; 
+      double dq_ref= (m_qRef.data[i] - m_refPre[i] )/m_dt;
+      double diff = m_qRef.data[i] - m_qCur.data[i];
+  
+      m_tauRef.data[i] = (m_pGain[i] * diff + m_dGain[i] * (dq_ref - dq_cur));
+      //m_tauRef.data[i] = m_pGain[i] * diff + m_dGain[i] * ( - dq_cur);
+
+      //limit 
+      if(fabs(m_tauRef.data[i])>m_Limit[i]){
+	if(m_tauRef.data[i]>0)
+	  m_tauRef.data[i]=m_Limit[i];
+	if(m_tauRef.data[i]<0)
+	  m_tauRef.data[i]=-m_Limit[i];
+      }
+      
+
+      m_qPre[i] = m_qCur.data[i];
+      m_refPre[i]= m_qRef.data[i];
+      //cout<<m_tauRef.data[i] <<" "; 
+      //cout<<"q"<<m_qCur.data[i] <<" d"<<m_tauRef.data[i]<<" "; 
+    }//for loop
+    //cout<<'\n'<<endl;
+
+    //m_tauRef.data[23] = m_tauRef.data[31]=0;//*0.1;
+   
+    m_tauRefOut.write();
+  }//qCur isnew
+
+
+  return RTC::RTC_OK;
+}
+
+
+RTC::ReturnCode_t JojoPDservo::onDeactivated(RTC::UniqueId ec_id)
+{
+  std::cout << "on Deactivated" << std::endl;
+  return RTC::RTC_OK;
+}
+//-----------------------------------------------------------------------
+
+extern "C"
+{
+ 
+  void JojoPDservoInit(RTC::Manager* manager)
+  {
+    coil::Properties profile(JojoPDservo_spec);
+    manager->registerFactory(profile,
+                             RTC::Create<JojoPDservo>,
+                             RTC::Delete<JojoPDservo>);
+  }
+  
+};

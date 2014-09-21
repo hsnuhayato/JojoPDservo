@@ -1,0 +1,62 @@
+-- The C compiler identification is GNU
+-- The CXX compiler identification is GNU
+-- Check for working C compiler: /usr/bin/gcc
+-- Check for working C compiler: /usr/bin/gcc -- works
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Check for working CXX compiler: /usr/bin/c++
+-- Check for working CXX compiler: /usr/bin/c++ -- works
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Found OpenRTM-aist 1.1.0 in /usr
+-- Found OpenHRP 3.1.5 in /usr/local
+-- checking for module 'choreonoid-body-plugin'
+--   found choreonoid-body-plugin, version 1.5.0
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /home/wu/src/HRP3.1x/myPDservo
+/usr/bin/cmake -H/home/wu/src/HRP3.1x/myPDservo -B/home/wu/src/HRP3.1x/myPDservo --check-build-system CMakeFiles/Makefile.cmake 0
+/usr/bin/cmake -E cmake_progress_start /home/wu/src/HRP3.1x/myPDservo/CMakeFiles /home/wu/src/HRP3.1x/myPDservo/CMakeFiles/progress.marks
+make -f CMakeFiles/Makefile2 all
+make[1]: ディレクトリ `/home/wu/src/HRP3.1x/myPDservo' に入ります
+make -f CMakeFiles/JojoPDservo.dir/build.make CMakeFiles/JojoPDservo.dir/depend
+make[2]: ディレクトリ `/home/wu/src/HRP3.1x/myPDservo' に入ります
+cd /home/wu/src/HRP3.1x/myPDservo && /usr/bin/cmake -E cmake_depends "Unix Makefiles" /home/wu/src/HRP3.1x/myPDservo /home/wu/src/HRP3.1x/myPDservo /home/wu/src/HRP3.1x/myPDservo /home/wu/src/HRP3.1x/myPDservo /home/wu/src/HRP3.1x/myPDservo/CMakeFiles/JojoPDservo.dir/DependInfo.cmake --color=
+Dependee "/home/wu/src/HRP3.1x/myPDservo/CMakeFiles/JojoPDservo.dir/DependInfo.cmake" is newer than depender "/home/wu/src/HRP3.1x/myPDservo/CMakeFiles/JojoPDservo.dir/depend.internal".
+Dependee "/home/wu/src/HRP3.1x/myPDservo/CMakeFiles/CMakeDirectoryInformation.cmake" is newer than depender "/home/wu/src/HRP3.1x/myPDservo/CMakeFiles/JojoPDservo.dir/depend.internal".
+Scanning dependencies of target JojoPDservo
+make[2]: ディレクトリ `/home/wu/src/HRP3.1x/myPDservo' から出ます
+make -f CMakeFiles/JojoPDservo.dir/build.make CMakeFiles/JojoPDservo.dir/build
+make[2]: ディレクトリ `/home/wu/src/HRP3.1x/myPDservo' に入ります
+/usr/bin/cmake -E cmake_progress_report /home/wu/src/HRP3.1x/myPDservo/CMakeFiles 1
+[ 33%] Building CXX object CMakeFiles/JojoPDservo.dir/JojoPDservo.cpp.o
+/usr/bin/c++   -DJojoPDservo_EXPORTS -ggdb3 -fno-schedule-insns -fno-schedule-insns2 -fno-strict-aliasing -O3 -DNDEBUG -fPIC -I/usr/include/openrtm-1.1 -I/usr/include/openrtm-1.1/rtm/idl -I/usr/local/include/OpenHRP-3.1 -I/usr/include/eigen3 -I/usr/include/coil-1.1 -I/usr/local/include -I/home/wu/src/hrpsys/trunk/cmake_modules -I/usr/local/include/choreonoid-1.5 -I/usr/include/qt4 -I/usr/include/qt4/QtCore -I/usr/include/qt4/QtGui -I/usr/include/qt4/QtOpenGL    -o CMakeFiles/JojoPDservo.dir/JojoPDservo.cpp.o -c /home/wu/src/HRP3.1x/myPDservo/JojoPDservo.cpp
+Linking CXX shared library JojoPDservo.so
+/usr/bin/cmake -E cmake_link_script CMakeFiles/JojoPDservo.dir/link.txt --verbose=1
+/usr/bin/c++  -fPIC  -ggdb3 -fno-schedule-insns -fno-schedule-insns2 -fno-strict-aliasing -O3 -DNDEBUG   -shared -Wl,-soname,JojoPDservo.so -o JojoPDservo.so CMakeFiles/JojoPDservo.dir/JojoPDservo.cpp.o -L/usr/lib/atlas-base/atlas -L/usr/local/lib -L/usr/local/lib/choreonoid-1.5 -lCnoidBody -lCnoidBodyPlugin -lCnoidUtil -lCnoidBase -lQtOpenGL -lQtGui -lQtCore -lCnoidBody -lCnoidBodyPlugin -lCnoidUtil -lCnoidBase -luuid -ldl -export-dynamic -Wl,-Bsymbolic-functions -Wl,-z,relro -lpthread -lomniORB4 -lomnithread -lomniDynamic4 -lRTC -lcoil -lhrpModel-3.1 -lhrpUtil-3.1 -llapack -lblas -lf2c -lm -lQtOpenGL -lQtGui -lQtCore -luuid -ldl -lpthread -lomniORB4 -lomnithread -lomniDynamic4 -lRTC -lcoil -lhrpModel-3.1 -lhrpUtil-3.1 -llapack -lblas -lf2c -lm -Wl,-rpath,/usr/lib/atlas-base/atlas:/usr/local/lib:/usr/local/lib/choreonoid-1.5 
+make[2]: ディレクトリ `/home/wu/src/HRP3.1x/myPDservo' から出ます
+/usr/bin/cmake -E cmake_progress_report /home/wu/src/HRP3.1x/myPDservo/CMakeFiles  1
+[ 33%] Built target JojoPDservo
+make -f CMakeFiles/JojoPDservoComp.dir/build.make CMakeFiles/JojoPDservoComp.dir/depend
+make[2]: ディレクトリ `/home/wu/src/HRP3.1x/myPDservo' に入ります
+cd /home/wu/src/HRP3.1x/myPDservo && /usr/bin/cmake -E cmake_depends "Unix Makefiles" /home/wu/src/HRP3.1x/myPDservo /home/wu/src/HRP3.1x/myPDservo /home/wu/src/HRP3.1x/myPDservo /home/wu/src/HRP3.1x/myPDservo /home/wu/src/HRP3.1x/myPDservo/CMakeFiles/JojoPDservoComp.dir/DependInfo.cmake --color=
+Dependee "/home/wu/src/HRP3.1x/myPDservo/CMakeFiles/JojoPDservoComp.dir/DependInfo.cmake" is newer than depender "/home/wu/src/HRP3.1x/myPDservo/CMakeFiles/JojoPDservoComp.dir/depend.internal".
+Dependee "/home/wu/src/HRP3.1x/myPDservo/CMakeFiles/CMakeDirectoryInformation.cmake" is newer than depender "/home/wu/src/HRP3.1x/myPDservo/CMakeFiles/JojoPDservoComp.dir/depend.internal".
+Scanning dependencies of target JojoPDservoComp
+make[2]: ディレクトリ `/home/wu/src/HRP3.1x/myPDservo' から出ます
+make -f CMakeFiles/JojoPDservoComp.dir/build.make CMakeFiles/JojoPDservoComp.dir/build
+make[2]: ディレクトリ `/home/wu/src/HRP3.1x/myPDservo' に入ります
+/usr/bin/cmake -E cmake_progress_report /home/wu/src/HRP3.1x/myPDservo/CMakeFiles 2
+[ 66%] Building CXX object CMakeFiles/JojoPDservoComp.dir/JojoPDservoComp.cpp.o
+/usr/bin/c++    -ggdb3 -fno-schedule-insns -fno-schedule-insns2 -fno-strict-aliasing -O3 -DNDEBUG -I/usr/include/openrtm-1.1 -I/usr/include/openrtm-1.1/rtm/idl -I/usr/local/include/OpenHRP-3.1 -I/usr/include/eigen3 -I/usr/include/coil-1.1 -I/usr/local/include -I/home/wu/src/hrpsys/trunk/cmake_modules -I/usr/local/include/choreonoid-1.5 -I/usr/include/qt4 -I/usr/include/qt4/QtCore -I/usr/include/qt4/QtGui -I/usr/include/qt4/QtOpenGL    -o CMakeFiles/JojoPDservoComp.dir/JojoPDservoComp.cpp.o -c /home/wu/src/HRP3.1x/myPDservo/JojoPDservoComp.cpp
+/usr/bin/cmake -E cmake_progress_report /home/wu/src/HRP3.1x/myPDservo/CMakeFiles 3
+[100%] Building CXX object CMakeFiles/JojoPDservoComp.dir/JojoPDservo.cpp.o
+/usr/bin/c++    -ggdb3 -fno-schedule-insns -fno-schedule-insns2 -fno-strict-aliasing -O3 -DNDEBUG -I/usr/include/openrtm-1.1 -I/usr/include/openrtm-1.1/rtm/idl -I/usr/local/include/OpenHRP-3.1 -I/usr/include/eigen3 -I/usr/include/coil-1.1 -I/usr/local/include -I/home/wu/src/hrpsys/trunk/cmake_modules -I/usr/local/include/choreonoid-1.5 -I/usr/include/qt4 -I/usr/include/qt4/QtCore -I/usr/include/qt4/QtGui -I/usr/include/qt4/QtOpenGL    -o CMakeFiles/JojoPDservoComp.dir/JojoPDservo.cpp.o -c /home/wu/src/HRP3.1x/myPDservo/JojoPDservo.cpp
+Linking CXX executable JojoPDservoComp
+/usr/bin/cmake -E cmake_link_script CMakeFiles/JojoPDservoComp.dir/link.txt --verbose=1
+/usr/bin/c++    -ggdb3 -fno-schedule-insns -fno-schedule-insns2 -fno-strict-aliasing -O3 -DNDEBUG    CMakeFiles/JojoPDservoComp.dir/JojoPDservoComp.cpp.o CMakeFiles/JojoPDservoComp.dir/JojoPDservo.cpp.o  -o JojoPDservoComp -rdynamic -L/usr/lib/atlas-base/atlas -L/usr/local/lib -L/usr/local/lib/choreonoid-1.5 -luuid -ldl -export-dynamic -Wl,-Bsymbolic-functions -Wl,-z,relro -lpthread -lomniORB4 -lomnithread -lomniDynamic4 -lRTC -lcoil -lhrpModel-3.1 -lhrpUtil-3.1 -lCnoidBody -lCnoidBodyPlugin -lCnoidUtil -lCnoidBase -lQtOpenGL -lQtGui -lQtCore -lCnoidBody -lCnoidBodyPlugin -lCnoidUtil -lCnoidBase -lboost_filesystem -lm -lQtOpenGL -lQtGui -lQtCore -lboost_filesystem -lm -Wl,-rpath,/usr/lib/atlas-base/atlas:/usr/local/lib:/usr/local/lib/choreonoid-1.5 
+make[2]: ディレクトリ `/home/wu/src/HRP3.1x/myPDservo' から出ます
+/usr/bin/cmake -E cmake_progress_report /home/wu/src/HRP3.1x/myPDservo/CMakeFiles  2 3
+[100%] Built target JojoPDservoComp
+make[1]: ディレクトリ `/home/wu/src/HRP3.1x/myPDservo' から出ます
+/usr/bin/cmake -E cmake_progress_start /home/wu/src/HRP3.1x/myPDservo/CMakeFiles 0
